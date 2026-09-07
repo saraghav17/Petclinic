@@ -1,0 +1,40 @@
+name: CI/CD War File deploy to tomcat
+on:
+  push:
+    branches: 
+      - master
+jobs:
+  build-deploy:
+     runs-on: ubuntu-latest
+     environment: DEV-ENV
+     steps:
+
+      - name: checkout code 
+        uses: actions/checkout@v5
+
+      - name: set-up jdk 
+        uses: actions/setup-java@v5
+        with:
+           distribution: "temurin"
+           java-version:  '17'
+
+      - name: validate with maven
+        run: mvn validate
+
+      - name: compile with maven
+        run: mvn compile
+
+      - name: test with maven
+        run: mvn test
+
+      - name: package with maven
+        run: mvn package
+
+      - name: verfiy the war file
+        run: ls -lh target/
+        
+      - name: deploy war to tomcat
+        run: |
+          curl -v -u "${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASSWORD }}" \
+          -T target/petclinic.war \
+          "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/petclinic&update=true"        
