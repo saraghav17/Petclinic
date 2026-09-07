@@ -31,8 +31,9 @@ jobs:
       - name: verify war file
         run: ls -lh target/ 
         
-      - name: deploy war to tomcat
+      - name: Deploy WAR to Tomcat
         run: |
-          curl -v -u ${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASSWORD }} \
-          -T target/petclinic.war \
-          "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/petclinic&update=true"   
+           curl -v \
+           -u "${{ secrets.TOMCAT_USER }}:${{ secrets.TOMCAT_PASSWORD }}" \
+           -T target/petclinic.war \
+            "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/petclinic&update=true"  
