@@ -6,7 +6,7 @@ on:
 jobs:
   build-deploy:
      runs-on: ubuntu-latest
-     environment: DEV-ENV
+     environment: TEST-ENV
      steps:
 
       - name: checkout code 
